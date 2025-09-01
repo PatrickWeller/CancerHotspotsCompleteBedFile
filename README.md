@@ -11,7 +11,7 @@ I used the cancerhotspots.org API to retrieve hotspot data and converted it into
 
 Splice variants have remained unchanged from the API output.
 
-The aim was to represent regions in a way that would be more useful for a pipeline to identify variants in hotspots, to aid S-VIG code automation. This resource may be helpful for NGS labs wanting to incorporate these hotspot regions into their pipelines.
+The aim was to represent regions in a way that would be more useful for a pipeline to identify variants in hotspots, to aid S-VIG UK code automation. This resource may be helpful for NGS labs wanting to incorporate these hotspot regions into their pipelines.
 
 ## Use at Your Own Risk
 
