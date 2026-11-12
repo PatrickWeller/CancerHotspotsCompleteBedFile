@@ -65,4 +65,4 @@ Splice hotspots (residue `X`, e.g. `TP53_X187`) aren't mapped by this code. Thei
 
 ## Before replacing the committed BEDs
 
-Diff `output/cancer_hotspots_GRCh3*.bed` against `../cancer_hotspots_GRCh3*.bed` and check that every difference makes sense. With `?version=v3`, expect about 165 extra lines from the extra hotspots, plus the RECQL4 X766 and SMARCB1 364 fixes. The automatic results from the 2025 build are kept in `../archive/2025_run_results/`.
+Diff `output/cancer_hotspots_GRCh3*.bed` against `../cancer_hotspots_GRCh3*.bed` and check that every difference makes sense.
