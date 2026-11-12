@@ -20,3 +20,7 @@ The transcripts provided by cancerhotspots.org API were not always accurate, so 
 Please validate the regions yourself if you're using this in production or clinical pipelines.
 - Not all entries have been manually reviewed—some regions may be inaccurate or imprecise.
 - BED coordinates are based on the best interpretation of the API output, but edge cases may need review.
+
+## Reproducing the BED files
+
+The scripts and inputs used to build these files are in [`pipeline/`](pipeline/). See [`pipeline/README.md`](pipeline/README.md) for how to run them.
