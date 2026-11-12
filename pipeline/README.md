@@ -19,12 +19,12 @@ python build.py --cached       # reuse the last run's downloads (~2 s), e.g. aft
 | `inputs/mane_select_cache.csv` | NCBI MANE summary: each gene's MANE Select transcript, used as the fallback in step 1 |
 | `inputs/20220125_hotspots_all_38.bed` | 2022-01-25 cancerHotspots BED (sigven/cancerHotspots); source of the splice regions |
 | `inputs/hg38ToHg19.over.chain.gz` | UCSC chain file for step 9 |
-| `manual/snvs_manual.bed` | SNV hotspots that failed automatically, resolved by hand in IGV |
+| `manual/snvs_manual.bed` | SNV (and splice) hotspots that failed automatically, resolved by hand in IGV |
 | `manual/indels_manual.bed` | Indel hotspots that failed automatically, resolved by hand in IGV |
 
 ## Downloads
 
-1. All hotspots from `cancerhotspots.org/api/hotspots/single`: 1110 `single residue` and 55 `in-frame indel`.
+1. All hotspots from `cancerhotspots.org/api/hotspots/single?version=v3`: 1274 `single residue` and 55 `in-frame indel` (as of November 2026). Without `?version=v3` the API returns 1165 (1110 + 55), which is what the 2025 BEDs were built from. Most of the extra v3 hotspots come with no transcript, so step 1 uses MANE Select for them.
 2. From Ensembl (GRCh38), every transcript those hotspots might use: each hotspot's own transcript plus its gene's MANE Select transcript. This includes their exons and protein sequences, fetched with Ensembl's batch endpoints, so it's a handful of requests.
 
 Both are saved in `output/` (`0_cancerhotspots_api.json`, `0_ensembl_transcripts.json`), as a record of what the build used and so `--cached` can rebuild without downloading. Everything after this runs locally: a codon's position in the genome is worked out from the transcript's exons.
@@ -35,10 +35,10 @@ If Ensembl or cancerhotspots.org is down, the download retries for about 2 minut
 
 | # | What | Output |
 |---|------|--------|
-| 1 | **SNV hotspots → codons.** Try the hotspot's transcript, then MANE Select; use the first whose protein has the hotspot's amino acid at that position | `1_snvs_auto.bed`, `1_snv_results.tsv` |
+| 1 | **SNV hotspots → codons.** Try the hotspot's transcript (if it has one), then MANE Select; use the first whose protein has the hotspot's amino acid at that position | `1_snvs_auto.bed`, `1_snv_results.tsv` |
 | 2 | **Drop splice rows** from step 1 (residue `X`, e.g. `PTEN_X70`); a codon is the wrong region for a splice site | `2_snvs_no_splice.bed` |
 | 3 | **Hand-curated SNVs** from `manual/snvs_manual.bed` | |
-| 4 | **Splice hotspots**: the `_sice_` rows of the 2022 cancerHotspots BED, unchanged | `4_splice.bed` |
+| 4 | **Splice hotspots**: the `_sice_` rows of the 2022 cancerHotspots BED; coordinates unchanged, `chr` prefix and extra columns removed | `4_splice.bed` |
 | 5 | **Indel hotspots → genomic spans**, on the hotspot's own transcript only. Indels have no amino acid to check, so switching to MANE wouldn't be safe | `5_indels_auto.bed`, `5_indel_results.tsv` |
 | 6 | **Hand-curated indels** from `manual/indels_manual.bed` | |
 | 7 | **Check every hotspot has a region** (below). If any don't, the build **stops** | `7_needs_manual_curation.tsv` |
@@ -65,4 +65,4 @@ Splice hotspots (residue `X`, e.g. `TP53_X187`) aren't mapped by this code. Thei
 
 ## Before replacing the committed BEDs
 
-Diff `output/cancer_hotspots_GRCh3*.bed` against `../cancer_hotspots_GRCh3*.bed` and check that every difference makes sense. The automatic results from the 2025 build are kept in `../archive/2025_run_results/`.
+Diff `output/cancer_hotspots_GRCh3*.bed` against `../cancer_hotspots_GRCh3*.bed` and check that every difference makes sense. With `?version=v3`, expect about 165 extra lines from the extra hotspots, plus the RECQL4 X766 and SMARCB1 364 fixes. The automatic results from the 2025 build are kept in `../archive/2025_run_results/`.
