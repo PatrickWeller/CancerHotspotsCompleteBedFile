@@ -61,7 +61,7 @@ The manual files are hotspots that failed automatically and were checked by hand
 
 Splice hotspots (residue `X`, e.g. `TP53_X187`) aren't mapped by this code. Their regions come from the 2022 sigven/cancerHotspots BED: single intronic bases (the canonical ±1/±2 splice positions, plus any other mutated bases) next to the exon edge at that codon. A splice hotspot missing from that BED is flagged in step 7. Look at the hotspot's codon in IGV to find the splice site, and add it to `manual/snvs_manual.bed` named `GENE_X###`.
 
-`RECQL4_X766` is a special case. Its transcript, ENST00000428558 (GRCh37 only), had a fake 1-bp intron to work around an extra C in the GRCh37 reference, so mutations at GRCh37 chr8:145738769 were called "splice". In GRCh38 that base is in codon 766 of the MANE transcript, so the manual entry is that codon.
+`RECQL4_X766` is a special case. Its transcript, ENST00000428558 (GRCh37 only), had a fake 1-bp intron to work around an extra C in the GRCh37 reference, so mutations at GRCh37 chr8:145738769 were called "splice". In GRCh38 that base is in codon 766 of the MANE transcript, so the manual entry is that codon. And then additional manual intervention changed the Build 37 coordinates to encompass all 4 bases.
 
 ## Before replacing the committed BEDs
 
